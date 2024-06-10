@@ -94,13 +94,25 @@ const Products = (props) => {
   const addToCart = (e) => {
     let name = e.target.name;
     let item = items.filter((item) => item.name == name);
+    if (item[0].instock == 0) {
+      console.log(`name: ${name} out of stock`);
+      return;
+    }
+    item[0].instock = item[0].instock - 1;
     console.log(`add to Cart ${JSON.stringify(item)}`);
     setCart([...cart, ...item]);
     //doFetch(query);
   };
   const deleteCartItem = (index) => {
+    console.log("index", index);
     let newCart = cart.filter((item, i) => index != i);
+    let target = cart.filter((item, targetindex) => index == targetindex);
+    let retItems = items.map((item, index) => {
+      if (item.name == target[0].name) item.instock = item.instock + 1;
+      return item;
+    });
     setCart(newCart);
+    setItems(retItems);
   };
   const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
